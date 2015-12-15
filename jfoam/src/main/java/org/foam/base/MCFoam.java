@@ -27,7 +27,7 @@ public class MCFoam {
     List<MCell>   cellStore = new ArrayList<MCell>();
     DataVector    cellVector = new DataVector();
     
-    int           maxNumberOfCells = 4;
+    int           maxNumberOfCells = 25000;
     
     public MCFoam(){
         
@@ -133,7 +133,7 @@ public class MCFoam {
         c1.draw(hw);
         
         H1D  hr  = new H1D("HR",200,0.0,1.0);
-        H2D  hrg = new H2D("HR",200,0.0,1.0,200,0.0,1.0);
+        H2D  hrg = new H2D("HR",60,0.0,1.0,60,0.0,1.0);
         
         for(int loop = 0; loop < 30000; loop++){
             double[] rand = foam.getRandom();
