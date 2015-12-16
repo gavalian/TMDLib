@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jlab.clas.tools.benchmark.BenchmarkTimer;
 import org.root.data.DataVector;
+import org.root.histogram.GraphErrors;
 import org.root.histogram.H1D;
 import org.root.histogram.H2D;
 import org.root.pad.TGCanvas;
@@ -27,12 +28,40 @@ public class MCFoam {
     List<MCell>   cellStore = new ArrayList<MCell>();
     DataVector    cellVector = new DataVector();
     
-    int           maxNumberOfCells = 25000;
+    int           maxNumberOfCells      = 25000;
+    int           exploreMaxSample      = 1000;
+    int           exploreHistogramBins  = 80;
+    double        mcTotalWeight         = 0.0;
+    
     
     public MCFoam(){
         
     }
     
+    public void setNSample(int sample){
+        this.exploreMaxSample = sample;
+        this.explorer.setNSample(sample);
+    }
+    
+    
+    public void setMaxCells(int mcells){
+        this.maxNumberOfCells = mcells;
+    }
+    
+    public void setLambdaBins(int bins){
+        this.exploreHistogramBins = bins;
+        this.explorer.setHbins(bins);
+    }
+    
+    public GraphErrors  getCellGraph(int dim1, int dim2){
+        GraphErrors graph = new GraphErrors();
+        for(MCell cell : this.cellStore){
+            double x = cell.cellQ[dim1] + 0.5*cell.cellH[dim1];
+            double y = cell.cellQ[dim2] + 0.5*cell.cellH[dim2];
+            graph.add(x, y);
+        }
+        return graph;
+    }
     
     public void setFunction(IMCFunc func){
         
@@ -42,8 +71,20 @@ public class MCFoam {
         this.explorer.exploreCell(cell, func);
         
         BenchmarkTimer  timer = new BenchmarkTimer("CELL-DIVISION");
+        int  iDivisionCounter    = 0;
+        int  numberOfBoxesToShow = 0;
         while(this.cellStore.size()<this.maxNumberOfCells){
 
+            iDivisionCounter++;
+            if(iDivisionCounter%500==0){
+                numberOfBoxesToShow = iDivisionCounter/500;
+
+                for(int loop = 0; loop < numberOfBoxesToShow; loop++) System.out.print("-");
+                System.out.print("> " + iDivisionCounter);
+                if(numberOfBoxesToShow%10==0) System.out.println();
+                System.out.print("\r");
+            }
+            
             timer.resume();
             int bestCandidateIndex = 0;
             int bestCandidateDim   = 0;
@@ -53,7 +94,7 @@ public class MCFoam {
             for(int loop = 1; loop < this.cellStore.size(); loop++){
                 MCell mc = this.cellStore.get(loop);
                 for(int dim = 0; dim < mc.getDim(); dim++){
-                    if(mc.getRLoss(dim)<bestRLOSS){
+                    if(mc.getRLoss(dim)>bestRLOSS){
                         bestRLOSS = mc.getRLoss(dim);
                         bestCandidateIndex = loop;
                         bestCandidateDim   = dim;
@@ -61,9 +102,8 @@ public class MCFoam {
                 }
             }
             
-            MCell divCell = this.cellStore.get(bestCandidateDim);
-            
-            this.cellStore.remove(bestCandidateDim);
+            MCell divCell = this.cellStore.get(bestCandidateIndex);            
+            this.cellStore.remove(bestCandidateIndex);
             
             MCell[]  dauCells = divCell.split(bestCandidateDim, divCell.getLambda(bestCandidateDim));
             //System.out.println(" SPLITTING CELL " + bestCandidateIndex);
@@ -79,6 +119,8 @@ public class MCFoam {
             totalWeight += mc.getWeight();
             System.out.println(mc);
         }
+        
+        this.mcTotalWeight = totalWeight;
         
         double totalIntegral = 0.0;
         for(int bin = 0; bin < this.cellStore.size();bin++){

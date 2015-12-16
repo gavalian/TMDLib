@@ -47,11 +47,11 @@ public class MCHist {
 
     public void analyze(H1D h){
         int nbins = h.getXaxis().getNBins();
-        this.bestRloss = 1.0;
+        this.bestRloss = 0.0;
         for(int loop = 1; loop < nbins-2; loop++){
             double rloss = this.buildProfile(h, loop);
             //System.out.println("    ************ RLOSS CHANGE " + rloss);
-            if(rloss<this.bestRloss){
+            if(rloss>this.bestRloss){
                 //System.out.println("    ************ RLOSS CHANGE " + rloss);
                 this.bestRloss = rloss;
                 if(this.binProgressL==0){
@@ -61,7 +61,7 @@ public class MCHist {
                 }
             }
         }
-        //System.out.println(" ANALYSIS RESULT = " + this.bestLambda + "  " + this.bestRloss);
+        System.out.println(" ANALYSIS RESULT = " + this.bestLambda + "  " + this.bestRloss);
     }
     
     
@@ -91,7 +91,8 @@ public class MCHist {
         //String titleString = String.format(" RLOSS PARENT = %12.5f RLOSS = %12.5f", rlossp,rloss);
         //this.profileHist.setTitle(String.format(" RLOSS PARENT = %12.5f RLOSS = %12.5f", rlossp,rloss));
         //System.out.println(titleString);
-        return rloss/rlossp;
+        //return (rlossp-rloss)/rlossp;
+        return (rlossp-rloss)/rlossp;
     }
     
     public H1D  getProfile(){ return this.profileHist;}

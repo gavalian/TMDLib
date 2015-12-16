@@ -1,0 +1,21 @@
+#!/bin/bash
+
+TMDDIR=`dirname $0`/.. ; export CLAS12DIR
+#--------------------------------------------------------------
+# Adding supporting COAT jar files
+for i in `ls -a $TMDDIR/lib/*.jar`
+do  
+#echo "$i"
+if [ -z "${JYPATH}" ] ; then
+JYPATH="$i"
+else
+JYPATH=${JYPATH}:"$i"
+fi
+done 
+#-------------------------------------------------------------
+#echo "*****************************************"
+#echo "*    Running COAT-JAVA Groovy Scripts   *" 
+#echo "*****************************************"
+#echo " "
+JAVA_OPTS="-Dsun.java2d.pmoffscreen=false"; export JAVA_OPTS
+groovy -cp "$JYPATH" $*

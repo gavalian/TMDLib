@@ -23,8 +23,8 @@ import org.root.pad.TGCanvas;
  */
 public class MCellExplorer {
     
-    int  nSamplesExplore = 1000;
-    int  cellLambdaBins  = 80;
+    int  nSamplesExplore = 4000;
+    int  cellLambdaBins  = 40;
     List<H1D>  hLambda                = new ArrayList<H1D>();    
     List<H1D>  hLambdaReiman          = new ArrayList<H1D>();
     List<GraphErrors>  graphRLoss     = new ArrayList<GraphErrors>();
@@ -36,7 +36,13 @@ public class MCellExplorer {
         
     }
     
+    public void setNSample(int sample){
+        this.nSamplesExplore = sample;
+    }
     
+    public void setHbins(int bins){
+        this.cellLambdaBins = bins;
+    }
     
     public void exploreCell(MCell cell, IMCFunc func){
         
@@ -97,11 +103,11 @@ public class MCellExplorer {
         MCell         cell2d     = new MCell(2);
         
         
-        explorer.exploreCell(cell2d, gausFunc);
+        //explorer.exploreCell(cell2d, gausFunc);
         System.out.println(cell2d);
         
         //explorer.exploreCell(cell, stpFunc);
-        //explorer.exploreCell(cell, expFunc);
+        explorer.exploreCell(cell, expFunc);
         //explorer.exploreCell(cells[0], expFunc);
 
         /*
@@ -152,10 +158,7 @@ public class MCellExplorer {
                 Logger.getLogger(MCellExplorer.class.getName()).log(Level.SEVERE, null, ex);
             }
             
-        }
-        
-        
-        
+        }                        
         mcH.analyze(explorer.getLambdaHistList().get(0));
     }
 }

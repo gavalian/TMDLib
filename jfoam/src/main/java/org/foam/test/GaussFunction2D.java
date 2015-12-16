@@ -14,6 +14,7 @@ import org.jlab.data.func.FunctionFactory;
  * @author gavalian
  */
 public class GaussFunction2D implements IMCFunc {
+    
     double x1 = 0.6;
     double y1 = 0.6;
     double x2 = 0.3;
