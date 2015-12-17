@@ -91,7 +91,7 @@ public class MCFoam {
             double bestRLOSS       = this.cellStore.get(0).getRLoss(0);
             //
             // FIND BEST DIMENSION
-            for(int loop = 1; loop < this.cellStore.size(); loop++){
+            for(int loop = 0; loop < this.cellStore.size(); loop++){
                 MCell mc = this.cellStore.get(loop);
                 for(int dim = 0; dim < mc.getDim(); dim++){
                     if(mc.getRLoss(dim)>bestRLOSS){
@@ -102,8 +102,16 @@ public class MCFoam {
                 }
             }
             
+            for(MCell c2 : this.cellStore){
+                System.out.println(c2);
+            }
+            System.out.println("[DIVISION] --->  INDEX = " + bestCandidateIndex 
+                    + "  DIM = " + bestCandidateDim + "  RLOSS = " + bestRLOSS);
+            
             MCell divCell = this.cellStore.get(bestCandidateIndex);            
             this.cellStore.remove(bestCandidateIndex);
+            
+            
             
             MCell[]  dauCells = divCell.split(bestCandidateDim, divCell.getLambda(bestCandidateDim));
             //System.out.println(" SPLITTING CELL " + bestCandidateIndex);

@@ -7,7 +7,7 @@ import org.root.pad.*;
 GaussFunction2D gausFunc = new GaussFunction2D();
 ExpFunction1D    expFunc = new ExpFunction1D();
 MCFoam foam = new MCFoam();
-foam.setMaxCells(40);
+foam.setMaxCells(300);
 foam.setFunction(expFunc);
 
 //GraphErrors  cellGraph = foam.getCellGraph(0,1);
