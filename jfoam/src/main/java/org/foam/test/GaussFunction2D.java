@@ -31,7 +31,7 @@ public class GaussFunction2D implements IMCFunc {
         double gx = FunctionFactory.gauss(r1, 0.0, 0.025);
         double gy = FunctionFactory.gauss(r2, 0.0, 0.025);
         
-        return 2.5*gy + 3.5*gx;
+        return 1.2 + 6.5*gy + 8.5*gx;
         //return  3.5*gx;
     }
 

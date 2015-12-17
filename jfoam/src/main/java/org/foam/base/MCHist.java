@@ -61,7 +61,7 @@ public class MCHist {
                 }
             }
         }
-        System.out.println(" ANALYSIS RESULT = " + this.bestLambda + "  " + this.bestRloss);
+        //System.out.println(" ANALYSIS RESULT = " + this.bestLambda + "  " + this.bestRloss);
     }
     
     
@@ -92,7 +92,7 @@ public class MCHist {
         //this.profileHist.setTitle(String.format(" RLOSS PARENT = %12.5f RLOSS = %12.5f", rlossp,rloss));
         //System.out.println(titleString);
         //return (rlossp-rloss)/rlossp;
-        return (rlossp-rloss)/rlossp;
+        return rlossp-rloss;
     }
     
     public H1D  getProfile(){ return this.profileHist;}

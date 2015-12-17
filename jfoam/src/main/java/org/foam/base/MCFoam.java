@@ -63,6 +63,16 @@ public class MCFoam {
         return graph;
     }
     
+    public GraphErrors  getCellGraph(int dim1){
+        GraphErrors graph = new GraphErrors();
+        for(MCell cell : this.cellStore){
+            double x = cell.cellQ[dim1] + 0.5*cell.cellH[dim1];
+            double y = 0.5;
+            graph.add(x, y);
+        }
+        return graph;
+    }
+    
     public void setFunction(IMCFunc func){
         
         MCell cell = new MCell(func.getNDim());
@@ -88,25 +98,32 @@ public class MCFoam {
             timer.resume();
             int bestCandidateIndex = 0;
             int bestCandidateDim   = 0;
-            double bestRLOSS       = this.cellStore.get(0).getRLoss(0);
+            //double bestRLOSS       = this.cellStore.get(0).getRLoss(0);
+            double bestWEIGHT      = this.cellStore.get(0).getWeight();
             //
             // FIND BEST DIMENSION
             for(int loop = 0; loop < this.cellStore.size(); loop++){
                 MCell mc = this.cellStore.get(loop);
-                for(int dim = 0; dim < mc.getDim(); dim++){
-                    if(mc.getRLoss(dim)>bestRLOSS){
-                        bestRLOSS = mc.getRLoss(dim);
+                if(mc.getWeight()>bestWEIGHT&&mc.getSize()>0.0001){
+                        //if(mc.getRLoss(dim)>bestRLOSS&&mc.getSize()>0.0001){                        
+                        bestWEIGHT = mc.getWeight();
                         bestCandidateIndex = loop;
-                        bestCandidateDim   = dim;
-                    }
+                }
+            }
+            double bestRLOSS       = this.cellStore.get(bestCandidateIndex).getRLoss(0);
+            MCell  sCell = this.cellStore.get(bestCandidateIndex);
+            for(int dim = 0; dim < sCell.getDim(); dim++){
+                if(sCell.getRLoss(dim)>bestRLOSS){
+                    bestRLOSS = sCell.getRLoss(dim);
+                    bestCandidateDim = dim;
                 }
             }
             
             for(MCell c2 : this.cellStore){
-                System.out.println(c2);
+                //System.out.println(c2);
             }
-            System.out.println("[DIVISION] --->  INDEX = " + bestCandidateIndex 
-                    + "  DIM = " + bestCandidateDim + "  RLOSS = " + bestRLOSS);
+            //System.out.println("[DIVISION] --->  INDEX = " + bestCandidateIndex 
+            //        + "  DIM = " + bestCandidateDim + "  RLOSS = " + bestRLOSS);
             
             MCell divCell = this.cellStore.get(bestCandidateIndex);            
             this.cellStore.remove(bestCandidateIndex);
@@ -125,7 +142,7 @@ public class MCFoam {
         double totalWeight = 0;
         for(MCell mc : this.cellStore){
             totalWeight += mc.getWeight();
-            System.out.println(mc);
+            //System.out.println(mc);
         }
         
         this.mcTotalWeight = totalWeight;

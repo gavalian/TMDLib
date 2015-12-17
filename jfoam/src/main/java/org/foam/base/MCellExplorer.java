@@ -23,7 +23,7 @@ import org.root.pad.TGCanvas;
  */
 public class MCellExplorer {
     
-    int  nSamplesExplore = 4000;
+    int  nSamplesExplore = 1000;
     int  cellLambdaBins  = 40;
     List<H1D>  hLambda                = new ArrayList<H1D>();    
     List<H1D>  hLambdaReiman          = new ArrayList<H1D>();

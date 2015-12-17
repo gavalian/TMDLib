@@ -31,7 +31,7 @@ public class MCFoamTests {
         TGCanvas c2 = new TGCanvas("c2","",600,600,1,2);
         MCHist mcH = new MCHist();
         GraphErrors graph = new GraphErrors();
-        MCell[]  cells = cell.split(0, cell.getLambda(0));
+        MCell[]  cells = cell.split(0, 0.99941);
         
         explorer.exploreCell(cells[1], expFunc);
         for(int loop = 0; loop < 78; loop++){
@@ -55,6 +55,12 @@ public class MCFoamTests {
             }
             
         }
+        
+        
+        explorer.exploreCell(cells[0], expFunc);
+        explorer.exploreCell(cells[1], expFunc);
+        System.out.println(cells[0]);
+        System.out.println(cells[1]);
     }
     
     public static void main(String[] args){

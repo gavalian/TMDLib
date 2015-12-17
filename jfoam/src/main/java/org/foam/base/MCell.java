@@ -95,7 +95,9 @@ public class MCell {
     }
     
     public double getRLoss(){
-        return this.cellRloss;
+        double rl = 0.0;
+        for(double v : this.rloss) rl += v;
+        return rl;
     }
     
     public double getWeight(){
@@ -144,7 +146,7 @@ public class MCell {
         StringBuilder str = new StringBuilder();
         str.append(
                 String.format("[MCELL] DIM = %d WEIGHT = %12.5f RLOSS = %12.5f\n",
-                this.cellQ.length,this.cellW, this.cellRloss));
+                this.cellQ.length,this.cellW, this.getRLoss()));
         for(int bin = 0; bin < this.getDim(); bin++){
             str.append(String.format("\t q/h : %12.5f %12.5f  rloss = %12.6f lambda = %12.5f\n", 
                     this.cellQ[bin],this.cellH[bin],this.rloss[bin],this.lambda[bin]));
