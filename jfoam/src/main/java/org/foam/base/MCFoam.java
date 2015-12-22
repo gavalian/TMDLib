@@ -13,6 +13,7 @@ import java.util.ArrayList;
 import java.util.List;
 import org.jlab.clas.tools.benchmark.BenchmarkTimer;
 import org.root.data.DataVector;
+import org.root.histogram.DataBox;
 import org.root.histogram.GraphErrors;
 import org.root.histogram.H1D;
 import org.root.histogram.H2D;
@@ -73,6 +74,14 @@ public class MCFoam {
         return graph;
     }
     
+    public List<DataBox> getCellBoxes(int d1, int d2){
+        List<DataBox>  boxes = new ArrayList<DataBox>();
+        for(MCell cell : this.cellStore){
+            boxes.add(new DataBox(cell.cellQ[d1],cell.cellQ[d2],cell.cellH[d1],cell.cellH[d2]));
+        }
+        return boxes;
+    }
+    
     public void setFunction(IMCFunc func){
         
         MCell cell = new MCell(func.getNDim());
@@ -104,7 +113,7 @@ public class MCFoam {
             // FIND BEST DIMENSION
             for(int loop = 0; loop < this.cellStore.size(); loop++){
                 MCell mc = this.cellStore.get(loop);
-                if(mc.getWeight()>bestWEIGHT&&mc.getSize()>0.0001){
+                if(mc.getWeight()>bestWEIGHT){
                         //if(mc.getRLoss(dim)>bestRLOSS&&mc.getSize()>0.0001){                        
                         bestWEIGHT = mc.getWeight();
                         bestCandidateIndex = loop;
