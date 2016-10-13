@@ -11,8 +11,10 @@ import java.lang.Exception;
 /**
  *
  * @author dmriser
+ * @param <T>
  */
-public class SparseGrid<T extends IGridContent> {    
+public class SparseGrid<T extends IGridContent> {
+    
     SparseIndexer indexer;
     HashMap<Long,T> binMap; 
     
@@ -30,6 +32,7 @@ public class SparseGrid<T extends IGridContent> {
         binMap.put(key,value);
     }
     
+    public HashMap<Long,T>  getGridMap(){ return binMap;}
     // Needs to use getOrDefault(key, defaultValue) to 
     // return empty bins properly 
     public T getBinContent(int[] bin){

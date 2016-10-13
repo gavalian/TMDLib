@@ -52,7 +52,7 @@ public class GridPointInteger implements IGridContent<Integer>{
    
     @Override
     public Integer empty(){
-        return new Integer(0);
+        return 0;
     }
     
 }

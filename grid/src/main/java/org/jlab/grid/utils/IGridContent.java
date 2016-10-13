@@ -8,6 +8,7 @@ package org.jlab.grid.utils;
 /**
  *
  * @author dmriser
+ * @param <T>
  */
 public interface IGridContent<T> {
     void setContent(T content);
