@@ -5,6 +5,7 @@
  */
 package org.jlab.grid.utils;
 
+
 /**
  *
  * @author gavalian
@@ -12,5 +13,6 @@ package org.jlab.grid.utils;
 public class Welcome {
     public Welcome(){
         System.out.println("Welcome to grid");
+        
     }
 }
